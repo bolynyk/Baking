@@ -7,11 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.olynyk.baking.com.olynyk.domain.Recipe;
+import com.olynyk.baking.domain.Recipe;
 
 import java.util.List;
-
-import androidx.cardview.widget.CardView;
 
 public class RecipeAdapter extends BaseAdapter {
 

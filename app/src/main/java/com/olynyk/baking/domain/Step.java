@@ -1,4 +1,4 @@
-package com.olynyk.baking.com.olynyk.domain;
+package com.olynyk.baking.domain;
 
 import android.os.Parcel;
 import android.os.Parcelable;

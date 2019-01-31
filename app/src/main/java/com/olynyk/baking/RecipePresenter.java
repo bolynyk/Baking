@@ -8,7 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-import com.olynyk.baking.com.olynyk.domain.Recipe;
+import com.olynyk.baking.domain.Recipe;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RecipePresenter implements RecipeContract.Presenter {
@@ -67,6 +66,11 @@ public class RecipePresenter implements RecipeContract.Presenter {
             Log.d(TAG, "", e);
             mView.showRecipes(new ArrayList<Recipe>());
         }
+    }
+
+    @Override
+    public void loadRecipeDetail(Recipe recipe) {
+        mView.showRecipeDetailUi(recipe);
     }
 
     private String generateUrl() throws URISyntaxException, MalformedURLException {

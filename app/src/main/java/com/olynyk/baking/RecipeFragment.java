@@ -1,12 +1,15 @@
 package com.olynyk.baking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.olynyk.baking.com.olynyk.domain.Recipe;
+import com.olynyk.baking.domain.Recipe;
+import com.olynyk.baking.recipedetail.RecipeDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +23,15 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
     private RecipeAdapter mRecipeAdapter;
     private RecipeContract.Presenter mPresenter;
 
+    private OnCardClickListener mOnCardClickListener;
+
     public RecipeFragment() {
+        mOnCardClickListener = new OnCardClickListener() {
+            @Override
+            public void onCardSelected(Recipe recipe) {
+                mPresenter.loadRecipeDetail(recipe);
+            }
+        };
     }
 
     public static RecipeFragment newInstance() {
@@ -55,11 +66,29 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
 
         GridView gridView = root.findViewById(R.id.recipes_grid_view);
         gridView.setAdapter(mRecipeAdapter);
+        gridView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Recipe recipe = (Recipe) mRecipeAdapter.getItem(position);
+                mOnCardClickListener.onCardSelected(recipe);
+            }
+        });
 
         return root;
     }
 
     public void showRecipes(List<Recipe> recipes) {
         mRecipeAdapter.replaceData(recipes);
+    }
+
+    public void showRecipeDetailUi(Recipe recipe) {
+        Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
+        intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
+        startActivity(intent);
+    }
+
+    public interface OnCardClickListener {
+        void onCardSelected(Recipe recipe);
     }
 }
