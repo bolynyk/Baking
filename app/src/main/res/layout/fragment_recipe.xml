@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
-        android:numColumns="3" />
+        android:columnWidth="256dp"
+        android:gravity="center"
+        android:horizontalSpacing="8dp"
+        android:numColumns="auto_fit"
+        android:padding="16dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="8dp" />
 
 </LinearLayout>

@@ -1,13 +1,17 @@
 package com.olynyk.baking;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import com.olynyk.baking.com.olynyk.domain.Recipe;
 
 import java.util.List;
+
+import androidx.cardview.widget.CardView;
 
 public class RecipeAdapter extends BaseAdapter {
 
@@ -36,7 +40,21 @@ public class RecipeAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        //TODO Implement View
-        return null;
+        if (convertView == null) {
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_recipe, parent, false);
+        }
+
+        Recipe recipe = (Recipe) getItem(position);
+
+        TextView textView = convertView.findViewById(R.id.recipe_item_title);
+        textView.setText(recipe.getName());
+
+        return convertView;
+    }
+
+    public void replaceData(List<Recipe> recipes) {
+        mRecipes.clear();
+        mRecipes.addAll(recipes);
+        notifyDataSetChanged();
     }
 }
