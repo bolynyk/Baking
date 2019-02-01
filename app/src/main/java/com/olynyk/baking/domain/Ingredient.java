@@ -6,6 +6,10 @@ import android.os.Parcelable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Formatter;
+
+import androidx.annotation.NonNull;
+
 public class Ingredient implements Parcelable {
     private int mQuantity;
     private String mUnit;
@@ -45,6 +49,12 @@ public class Ingredient implements Parcelable {
 
     public void setName(String name) {
         this.mName = name;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return String.format("%s%s %s", mQuantity, mUnit, mName);
     }
 
     @Override

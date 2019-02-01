@@ -15,7 +15,7 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.recipe_toolbar);
         toolbar.setTitle(R.string.recipe_toolbar_title);
         setSupportActionBar(toolbar);
 
@@ -27,7 +27,7 @@ public class RecipeActivity extends AppCompatActivity {
     private void initFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.recipe_frame_layout, fragment);
+        fragmentTransaction.add(R.id.recipe_detail_frame_layout, fragment);
         fragmentTransaction.commit();
     }
 }

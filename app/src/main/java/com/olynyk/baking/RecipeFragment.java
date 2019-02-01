@@ -64,7 +64,7 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
 
         final View root = inflater.inflate(R.layout.fragment_recipe, container, false);
 
-        GridView gridView = root.findViewById(R.id.recipes_grid_view);
+        GridView gridView = root.findViewById(R.id.recipe_grid_view);
         gridView.setAdapter(mRecipeAdapter);
         gridView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
 
