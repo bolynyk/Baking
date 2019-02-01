@@ -1,12 +1,12 @@
 package com.olynyk.baking;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.os.Bundle;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -27,7 +27,7 @@ public class RecipeActivity extends AppCompatActivity {
     private void initFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.recipe_detail_frame_layout, fragment);
+        fragmentTransaction.add(R.id.recipe_frame_layout, fragment);
         fragmentTransaction.commit();
     }
 }
