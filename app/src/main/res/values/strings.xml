@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Baking</string>
     <string name="recipe_toolbar_title">Baking Time</string>
+    <string name="recipe_detail_ingredients_title">Ingredients</string>
+    <string name="recipe_detail_steps_title">Steps</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
 </resources>

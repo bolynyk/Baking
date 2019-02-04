@@ -97,4 +97,16 @@ public class Recipe implements Parcelable {
         dest.writeTypedList(mIngredients);
         dest.writeTypedList(mSteps);
     }
+
+    public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
+        @Override
+        public Recipe createFromParcel(Parcel source) {
+            return new Recipe(source);
+        }
+
+        @Override
+        public Recipe[] newArray(int size) {
+            return new Recipe[size];
+        }
+    };
 }
