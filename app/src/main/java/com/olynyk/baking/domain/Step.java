@@ -17,7 +17,7 @@ public class Step implements Parcelable {
         this.mId = jsonObject.getInt("id");
         this.mShortDescription = jsonObject.getString("shortDescription");
         this.mLongDescription = jsonObject.getString("description");
-        this.mVideoUrl = jsonObject.optString("viewURL", null);
+        this.mVideoUrl = jsonObject.optString("videoURL", null);
         this.mImageUrl = jsonObject.optString("thumbnailURL", null);
     }
 

@@ -4,30 +4,41 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/recipe_step_temporary_image_view"
+    <com.google.android.exoplayer2.ui.PlayerView
+        android:id="@+id/recipe_step_video_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:srcCompat="@android:drawable/ic_media_play"
-        app:layout_constraintTop_toTopOf="parent"
+        app:fastforward_increment="30000"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:rewind_increment="30000"
+        app:show_timeout="10000" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.34" />
 
     <View
         android:id="@+id/recipe_step_divider"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintTop_toBottomOf="@id/recipe_step_temporary_image_view"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recipe_step_video_view" />
 
     <TextView
         android:id="@+id/recipe_step_long_description"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/recipe_step_divider"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recipe_step_divider" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
