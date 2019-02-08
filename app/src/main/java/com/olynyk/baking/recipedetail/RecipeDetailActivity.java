@@ -29,11 +29,13 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        Toolbar toolbar = findViewById(R.id.recipe_detail_toolbar);
-        toolbar.setTitle(R.string.recipe_toolbar_title);
-        setSupportActionBar(toolbar);
-
         Recipe recipe = getIntent().getParcelableExtra(EXTRA_RECIPE);
+
+        Toolbar toolbar = findViewById(R.id.recipe_detail_toolbar);
+        toolbar.setTitle(recipe.getName());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         if (findViewById(R.id.recipe_step_frame_layout) != null) {
             mTwoPane = true;
@@ -45,6 +47,12 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
                 initFragment(R.id.recipe_step_frame_layout, RecipeStepFragment.newInstance(recipe.getSteps().get(0)));
             }
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override

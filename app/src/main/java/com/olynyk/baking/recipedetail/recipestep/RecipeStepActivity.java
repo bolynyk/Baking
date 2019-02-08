@@ -21,15 +21,24 @@ public class RecipeStepActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_step);
 
-        Toolbar toolbar = findViewById(R.id.recipe_step_toolbar);
-        toolbar.setTitle(R.string.recipe_toolbar_title);
-        setSupportActionBar(toolbar);
-
         Step step = getIntent().getParcelableExtra(EXTRA_RECIPE_STEP);
+
+        Toolbar toolbar = findViewById(R.id.recipe_step_toolbar);
+        toolbar.setTitle("Step " + step.getId());
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         if (savedInstanceState == null) {
             initFragment(RecipeStepFragment.newInstance(step));
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private void initFragment(Fragment fragment) {

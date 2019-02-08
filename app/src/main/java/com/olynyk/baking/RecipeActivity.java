@@ -2,11 +2,15 @@ package com.olynyk.baking;
 
 import android.os.Bundle;
 
+import com.olynyk.baking.util.EspressoIdlingResource;
+
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.test.espresso.IdlingResource;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -29,5 +33,10 @@ public class RecipeActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.recipe_frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+
+    @VisibleForTesting
+    public IdlingResource getIdlingResource() {
+        return EspressoIdlingResource.getIdlingResource();
     }
 }

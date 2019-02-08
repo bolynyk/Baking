@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
 import com.olynyk.baking.domain.Recipe;
+import com.olynyk.baking.util.EspressoIdlingResource;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,6 +34,8 @@ public class RecipePresenter implements RecipeContract.Presenter {
     @Override
     public void loadRecipes() {
         try {
+            EspressoIdlingResource.deactivate();
+
             RequestQueue requestQueue = Volley.newRequestQueue(mView.getContext());
 
             JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, generateUrl(), null, new Response.Listener<JSONArray>() {
@@ -47,14 +50,20 @@ public class RecipePresenter implements RecipeContract.Presenter {
                     } catch (JSONException e) {
                         Log.d(TAG, "", e);
                         mView.showRecipes(new ArrayList<Recipe>());
+                    } finally {
+                        EspressoIdlingResource.activate();
                     }
                 }
             }, new Response.ErrorListener() {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Log.d(TAG, error.getMessage());
-                    mView.showRecipes(new ArrayList<Recipe>());
+                    try {
+                        Log.d(TAG, error.getMessage());
+                        mView.showRecipes(new ArrayList<Recipe>());
+                    } finally {
+                        EspressoIdlingResource.activate();
+                    }
                 }
             });
 
