@@ -145,7 +145,7 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
 
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource.Factory(
-                new DefaultHttpDataSourceFactory("exoplayer-codelab")).
+                new DefaultHttpDataSourceFactory("exoplayer")).
                 createMediaSource(uri);
     }
 
