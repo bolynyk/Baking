@@ -1,58 +1,100 @@
 package com.olynyk.baking;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.olynyk.baking.domain.Recipe;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeAdapter extends BaseAdapter {
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-    private Context mContext;
+public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
+
     private List<Recipe> mRecipes;
+    private RecipeItemLisener mRecipeItemListener;
 
-    public RecipeAdapter(Context context, List<Recipe> recipes) {
-        this.mContext = context;
-        this.mRecipes = recipes;
+    public RecipeAdapter(List<Recipe> recipes, RecipeItemLisener recipeItemLisener) {
+        if (recipes != null) {
+            this.mRecipes = recipes;
+        } else {
+            this.mRecipes = new ArrayList<>();
+        }
+        this.mRecipeItemListener = recipeItemLisener;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
+        View recipeView = layoutInflater.inflate(R.layout.item_recipe, parent, false);
+        return new ViewHolder(recipeView, mRecipeItemListener);
     }
 
     @Override
-    public int getCount() {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Recipe recipe = mRecipes.get(position);
+
+        holder.mTextView.setText(recipe.getName());
+        if (recipe.getImage() != null && !recipe.getImage().isEmpty()) {
+            holder.mImageView.setVisibility(View.VISIBLE);
+            Picasso.get().load(Uri.parse(recipe.getImage())).into(holder.mImageView);
+        } else {
+            holder.mImageView.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
         return mRecipes.size();
     }
 
-    @Override
-    public Object getItem(int position) {
+    public Recipe getItem(int position) {
         return mRecipes.get(position);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return mRecipes.get(position).getId();
+    public void replaceData(List<Recipe> recipes) {
+        if (recipes != null) {
+            mRecipes.clear();
+            mRecipes.addAll(recipes);
+        } else {
+            mRecipes.clear();
+        }
+        notifyDataSetChanged();
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_recipe, parent, false);
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private ImageView mImageView;
+        private TextView mTextView;
+        private RecipeItemLisener mRecipeItemListener;
+
+        public ViewHolder(View itemView, RecipeItemLisener recipeItemLisener) {
+            super(itemView);
+            this.mRecipeItemListener = recipeItemLisener;
+            mImageView = itemView.findViewById(R.id.recipe_item_image_view);
+            mTextView = itemView.findViewById(R.id.recipe_item_title);
+            itemView.setOnClickListener(this);
         }
 
-        Recipe recipe = (Recipe) getItem(position);
-
-        TextView textView = convertView.findViewById(R.id.recipe_item_title);
-        textView.setText(recipe.getName());
-
-        return convertView;
+        @Override
+        public void onClick(View v) {
+            int position = getAdapterPosition();
+            Recipe recipe = getItem(position);
+            mRecipeItemListener.onRecipeClick(recipe);
+        }
     }
 
-    public void replaceData(List<Recipe> recipes) {
-        mRecipes.clear();
-        mRecipes.addAll(recipes);
-        notifyDataSetChanged();
+    public interface RecipeItemLisener {
+        void onRecipeClick(Recipe recipe);
     }
 }

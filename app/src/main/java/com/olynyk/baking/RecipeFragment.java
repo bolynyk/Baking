@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 
 import com.olynyk.baking.domain.Recipe;
 import com.olynyk.baking.recipedetail.RecipeDetailActivity;
@@ -17,6 +15,8 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class RecipeFragment extends Fragment implements RecipeContract.View {
 
@@ -41,8 +41,8 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRecipeAdapter = new RecipeAdapter(getContext(), new ArrayList<Recipe>());
         mPresenter = new RecipePresenter(this);
+        mRecipeAdapter = new RecipeAdapter(new ArrayList<Recipe>(), mRecipeItemListener);
     }
 
     @Override
@@ -64,17 +64,13 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
 
         final View root = inflater.inflate(R.layout.fragment_recipe, container, false);
 
-        GridView gridView = root.findViewById(R.id.recipe_grid_view);
-        gridView.setAdapter(mRecipeAdapter);
-        gridView.setOnItemClickListener( new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Recipe recipe = (Recipe) mRecipeAdapter.getItem(position);
-                mOnCardClickListener.onCardSelected(recipe);
-            }
-        });
-
+        RecyclerView recyclerView = root.findViewById(R.id.recipe_recycler_view);
+        recyclerView.setAdapter(mRecipeAdapter);
+        if(getResources().getBoolean(R.bool.isTablet)) {
+            recyclerView.setLayoutManager(new GridLayoutManager(root.getContext(), 3));
+        } else {
+            recyclerView.setLayoutManager(new GridLayoutManager(root.getContext(), 1));
+        }
         return root;
     }
 
@@ -87,6 +83,13 @@ public class RecipeFragment extends Fragment implements RecipeContract.View {
         intent.putExtra(RecipeDetailActivity.EXTRA_RECIPE, recipe);
         startActivity(intent);
     }
+
+    private RecipeAdapter.RecipeItemLisener mRecipeItemListener = new RecipeAdapter.RecipeItemLisener() {
+        @Override
+        public void onRecipeClick(Recipe recipe) {
+            mOnCardClickListener.onCardSelected(recipe);
+        }
+    };
 
     public interface OnCardClickListener {
         void onCardSelected(Recipe recipe);

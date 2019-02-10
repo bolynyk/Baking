@@ -64,7 +64,7 @@ public class RecipeDetailFragment extends Fragment implements RecipeDetailContra
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        setRetainInstance(true);
+//        setRetainInstance(true);
     }
 
     @Nullable
