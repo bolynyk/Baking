@@ -16,10 +16,10 @@ import org.junit.runner.RunWith;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -28,7 +28,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.anything;
 import static org.hamcrest.CoreMatchers.instanceOf;
 
 @RunWith(AndroidJUnit4.class)
@@ -50,7 +49,8 @@ public class RecipeActivityTest {
 
     @Test
     public void clickGridViewItem_OpensRecipeDetailActivity() {
-        onData(anything()).inAdapterView(withId(R.id.recipe_grid_view)).atPosition(0).perform(click());
+
+        onView(withId(R.id.recipe_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         onView(
                 allOf(instanceOf(TextView.class),
@@ -58,13 +58,13 @@ public class RecipeActivityTest {
 
         onView(withId(R.id.recipe_detail_ingredients_title)).check(matches(withText("Ingredients")));
 
-        ViewInteraction textView = onView(
+        ViewInteraction ingredientTitleTextView = onView(
                 allOf(withId(R.id.recipe_detail_ingredient_item_title),
                         withText("2-CUP Graham Cracker crumbs"),
                         childAtPosition(childAtPosition(withId(R.id.recipe_detail_ingredients_recycler_view), 0), 0),
                         isDisplayed()));
 
-        textView.check(matches(withText("2-CUP Graham Cracker crumbs")));
+        ingredientTitleTextView.check(matches(withText("2-CUP Graham Cracker crumbs")));
     }
 
     private static Matcher<View> childAtPosition(

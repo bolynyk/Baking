@@ -22,8 +22,6 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     public static final String EXTRA_RECIPE = "EXTRA_RECIPE";
 
-    private boolean mTwoPane;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,13 +35,9 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (findViewById(R.id.recipe_step_frame_layout) != null) {
-            mTwoPane = true;
-        }
-
         if (savedInstanceState == null) {
             initFragment(R.id.recipe_detail_frame_layout, RecipeDetailFragment.newInstance(recipe));
-            if (mTwoPane) {
+            if (getResources().getBoolean(R.bool.isTablet)) {
                 initFragment(R.id.recipe_step_frame_layout, RecipeStepFragment.newInstance(recipe.getSteps().get(0)));
             }
         }
@@ -57,7 +51,7 @@ public class RecipeDetailActivity extends AppCompatActivity implements RecipeDet
 
     @Override
     public void onStepItemClicked(Step step) {
-        if (mTwoPane) {
+        if (getResources().getBoolean(R.bool.isTablet)) {
             Fragment fragment = RecipeStepFragment.newInstance(step);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.recipe_step_frame_layout, fragment).commit();

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -23,6 +24,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.olynyk.baking.R;
 import com.olynyk.baking.domain.Step;
+import com.squareup.picasso.Picasso;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -37,6 +39,7 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
     private TextView mRecipeStepDescription;
     private SimpleExoPlayer mSimpleExoPlayer;
     private PlayerView mPlayerView;
+    private ImageView mImageView;
     private long playbackPosition;
     private int currentWindow;
     private boolean playWhenReady = true;
@@ -83,6 +86,7 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
         mRecipeStepDescription = root.findViewById(R.id.recipe_step_long_description);
 
         mPlayerView = root.findViewById(R.id.recipe_step_video_view);
+        mImageView = root.findViewById(R.id.recipe_step_image_view);
 
         return root;
     }
@@ -94,9 +98,13 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
         Step step = getArguments().getParcelable(ARGUMENT_RECIPE_STEP);
         mRecipeStepDescription.setText(step.getLongDescription());
 
-        hideSystemUi();
-        if ((Util.SDK_INT <= 23 || mSimpleExoPlayer == null)) {
-            initializePlayer(step.getVideoUrl());
+        if (step.getImageUrl() != null && !step.getImageUrl().isEmpty()) {
+            initializeImage(step.getImageUrl());
+        } else {
+            hideSystemUi();
+            if ((Util.SDK_INT <= 23 || mSimpleExoPlayer == null)) {
+                initializePlayer(step.getVideoUrl());
+            }
         }
     }
 
@@ -117,6 +125,8 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
     }
 
     private void initializePlayer(String videoUrl) {
+        mPlayerView.setVisibility(View.VISIBLE);
+        mImageView.setVisibility(View.GONE);
         if (mSimpleExoPlayer == null) {
             // a factory to create an AdaptiveVideoTrackSelection
             TrackSelection.Factory adaptiveTrackSelectionFactory =
@@ -126,11 +136,18 @@ public class RecipeStepFragment extends Fragment implements RecipeStepContract.V
                     new DefaultTrackSelector(adaptiveTrackSelectionFactory), new DefaultLoadControl());
 
             mPlayerView.setPlayer(mSimpleExoPlayer);
-            mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
-            mSimpleExoPlayer.seekTo(currentWindow, playbackPosition);
         }
+
         MediaSource mediaSource = buildMediaSource(Uri.parse(videoUrl));
         mSimpleExoPlayer.prepare(mediaSource, true, false);
+        mSimpleExoPlayer.setPlayWhenReady(playWhenReady);
+        mSimpleExoPlayer.seekTo(currentWindow, playbackPosition);
+    }
+
+    private void initializeImage(String imageUrl) {
+        mPlayerView.setVisibility(View.GONE);
+        mImageView.setVisibility(View.VISIBLE);
+        Picasso.get().load(Uri.parse(imageUrl)).into(mImageView);
     }
 
     private void releasePlayer() {
